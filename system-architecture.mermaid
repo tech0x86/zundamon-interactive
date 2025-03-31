@@ -1,0 +1,63 @@
+flowchart TB
+    subgraph ハードウェア層
+    sensor["超音波センサー\n(人感知)"]
+    led["RGBフルカラーLED\n(感情表現・口パク)"]
+    speaker["スピーカー\n(音声出力)"]
+    end
+    
+    subgraph 処理層
+    distance["距離測定モジュール"]
+    emotion["感情表現モジュール"]
+    audio_player["音声再生モジュール"]
+    scheduler["スケジューラ\n(定期処理)"]
+    end
+    
+    subgraph API層
+    llm["OpenAI API\n(会話生成)"]
+    voicevox["VOICEVOX API\n(音声合成)"]
+    newsapi["NewsAPI\n(ニュース取得)"]
+    end
+    
+    subgraph ストレージ層
+    audio_cache["音声キャッシュ"]
+    conversation["会話履歴"]
+    news_data["ニュースデータ"]
+    end
+    
+    sensor --> distance
+    distance --> main["メインループ"]
+    
+    main --> conversation
+    main --> emotion
+    emotion --> led
+    
+    main --> dialog["会話生成"]
+    dialog --> llm
+    llm --> dialog
+    
+    dialog --> voice["音声生成"]
+    voice --> voicevox
+    voicevox --> voice
+    
+    voice --> audio_cache
+    audio_cache --> audio_player
+    audio_player --> speaker
+    
+    scheduler --> news_update["ニュース更新"]
+    news_update --> newsapi
+    newsapi --> news_update
+    news_update --> news_data
+    news_data --> main
+    
+    voice --> lip_sync["口パク制御"]
+    lip_sync --> led
+    
+    classDef hardware fill:#bbf,stroke:#333,stroke-width:2px
+    classDef processing fill:#bfb,stroke:#333,stroke-width:2px
+    classDef api fill:#fbf,stroke:#333,stroke-width:2px
+    classDef storage fill:#fbb,stroke:#333,stroke-width:2px
+    
+    class sensor,led,speaker hardware
+    class distance,emotion,audio_player,scheduler,main,dialog,voice,lip_sync,news_update processing
+    class llm,voicevox,newsapi api
+    class audio_cache,conversation,news_data storage

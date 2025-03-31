@@ -1,0 +1,116 @@
+# ずんだもん対話システム セットアップガイド
+
+## 概要
+このシステムは、Raspberry Piを使用して人が近づくと反応し、ずんだもんキャラクターが会話するインタラクティブなシステムです。以下の機能を備えています：
+
+- 超音波センサーによる人感知
+- フルカラーLEDによる感情表現と口パク
+- VOICEVOXによるずんだもんの音声合成
+- OpenAI APIによる会話内容生成
+- NewsAPIによる最新ニュース取得
+
+## ハードウェア要件
+- Raspberry Pi 3以上
+- RGBフルカラーLED
+- 超音波距離センサー（HC-SR04等）
+- スピーカー（3.5mmジャックまたはUSB）
+- ジャンパーワイヤー
+- 抵抗（LEDに必要な場合）
+
+## 配線図
+
+```
+RGBフルカラーLED:
+- 赤色ピン → GPIO 16（抵抗経由）
+- 緑色ピン → GPIO 20（抵抗経由）
+- 青色ピン → GPIO 21（抵抗経由）
+- GND → Raspberry Pi GND
+
+超音波センサー:
+- VCC → Raspberry Pi 5V
+- Trig → GPIO 15
+- Echo → GPIO 14
+- GND → Raspberry Pi GND
+```
+
+## ソフトウェアセットアップ
+
+### 1. VOICEVOXのインストール
+1. [VOICEVOX公式サイト](https://voicevox.hiroshiba.jp/)からダウンロード
+2. インストールして起動（サーバーモードで起動、デフォルトポート: 50021）
+
+### 2. 必要なPythonライブラリのインストール
+```bash
+pip install adafruit-blinka pygame requests schedule
+```
+
+### 3. API鍵の設定
+```bash
+# OpenAI API鍵（会話生成用）
+export OPENAI_API_KEY="your-openai-api-key"
+
+# NewsAPI鍵（ニュース取得用）
+export NEWS_API_KEY="your-newsapi-key"
+```
+
+### 4. スクリプトのダウンロードと実行
+```bash
+git clone https://github.com/あなたのユーザー名/zundamon-interactive.git
+cd zundamon-interactive
+python zundamon_system.py
+```
+
+## カスタマイズ方法
+
+### 感情表現の調整
+`set_emotion_led`関数内で、各感情に対するLEDの色を変更できます：
+
+```python
+def set_emotion_led(emotion):
+    if emotion == "happy":
+        set_led_color(0, 65535, 0)  # 緑色 - カスタマイズ可能
+```
+
+### 会話内容のカスタマイズ
+`generate_response`関数内のシステムプロンプトを変更することで、ずんだもんの話し方や性格を調整できます：
+
+```python
+"system": "あなたはずんだもんというキャラクターです。「～のだ」「～なのだ」という語尾で話し..."
+```
+
+### 話題の追加
+`get_idle_topic`関数内の話題リストを編集することで、アイドル時の話題を追加できます：
+
+```python
+topics = [
+    "今日の天気はどうかな？",
+    "何か面白いことがあったのだ？",
+    # 新しい話題を追加
+]
+```
+
+## トラブルシューティング
+
+### 音声が再生されない場合
+- VOICEVOXサーバーが起動しているか確認
+- 環境変数が正しく設定されているか確認
+- スピーカーが正しく接続されているか確認
+
+### センサーが反応しない場合
+- 配線が正確か確認
+- `get_distance`関数内の値を調整してみる
+
+### API関連のエラー
+- API鍵が正しく設定されているか確認
+- インターネット接続を確認
+
+## 注意事項
+- VOICEVOXは比較的高いCPU使用率になるため、Raspberry Pi 4以上を推奨
+- 常時接続型のシステムとして使用する場合は、熱対策を検討する
+- APIリクエスト数に制限がある場合は、`generate_response`関数の呼び出し頻度を調整する
+
+## 応用アイデア
+- カメラを追加して顔認識機能を実装
+- マイクを追加して音声入力に対応
+- ディスプレイを追加してずんだもんのアニメーション表示
+- 他のキャラクターに変更（VOICEVOXの他の話者IDに変更）

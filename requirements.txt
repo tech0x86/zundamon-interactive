@@ -1,0 +1,49 @@
+# 必要なライブラリ
+adafruit-blinka==7.0.0
+pygame==2.1.2
+requests==2.28.1
+schedule==1.1.0
+
+# 環境設定
+1. VOICEVOXのインストールと起動
+   - VOICEVOXをダウンロード: https://voicevox.hiroshiba.jp/
+   - ローカルサーバーとして起動（デフォルトは http://localhost:50021）
+
+2. OpenAI APIキーの設定
+   - 環境変数として設定: export OPENAI_API_KEY="your-api-key-here"
+   - またはスクリプト内で直接設定
+
+3. NewsAPI APIキーの設定（ニュース検索用）
+   - 登録: https://newsapi.org/
+   - 環境変数として設定: export NEWS_API_KEY="your-api-key-here"
+   - またはスクリプト内で直接設定
+
+4. 配線設定
+   - RGBフルカラーLED: 
+     * 赤: GPIO 16
+     * 緑: GPIO 20
+     * 青: GPIO 21
+   - 超音波センサー:
+     * Trig: GPIO 15
+     * Echo: GPIO 14
+
+# インストール方法
+```bash
+# 必要なパッケージのインストール
+pip install -r requirements.txt
+
+# VOICEVOXの起動（別のターミナルで）
+# VOICEVOXアプリケーションを起動し、サーバーモードで動作させる
+
+# スクリプトの実行
+python zundamon_system.py
+```
+
+# 機能
+- 人が近づくと反応し、ずんだもんが挨拶
+- 距離センサーで人の接近を検知
+- VOICEVOXでずんだもんの音声合成
+- OpenAI APIで会話内容生成
+- NewsAPIで定期的にニュース情報取得
+- 感情表現（LED色変化）と口パク表現（LED点滅）
+- 音声キャッシュで効率化

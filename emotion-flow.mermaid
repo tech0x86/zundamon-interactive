@@ -1,0 +1,49 @@
+flowchart TB
+    subgraph 感情状態
+    normal["通常状態\n(白色LED)"]
+    happy["喜び状態\n(緑色LED)"]
+    angry["怒り状態\n(赤色LED)"]
+    sad["悲しみ状態\n(青色LED)"]
+    surprised["驚き状態\n(黄色LED)"]
+    end
+    
+    subgraph 口パク表現
+    lip["口パク表現\n(LED点滅)"]
+    end
+    
+    subgraph キーワード検出
+    happy_words["「嬉しい」「楽しい」\n「やったー」など"]
+    angry_words["「怒」「むかっ」\n「許さない」など"]
+    sad_words["「悲しい」「さみしい」\n「泣」など"]
+    surprised_words["「びっくり」「えっ」\n「まさか」など"]
+    end
+    
+    text["LLM生成テキスト"] --> analyze["感情分析処理"]
+    analyze --> happy_words
+    analyze --> angry_words
+    analyze --> sad_words
+    analyze --> surprised_words
+    
+    happy_words --> happy
+    angry_words --> angry
+    sad_words --> sad
+    surprised_words --> surprised
+    analyze --> normal
+    
+    voice["音声再生開始"] --> lip
+    
+    normal -.-> return["元の感情に戻る"]
+    happy -.-> return
+    angry -.-> return
+    sad -.-> return
+    surprised -.-> return
+    
+    lip --> return
+    
+    classDef emotion fill:#f9f,stroke:#333,stroke-width:2px
+    classDef expression fill:#bbf,stroke:#333,stroke-width:2px
+    classDef analysis fill:#fbb,stroke:#333,stroke-width:2px
+    
+    class normal,happy,angry,sad,surprised emotion
+    class lip expression
+    class happy_words,angry_words,sad_words,surprised_words,analyze analysis
