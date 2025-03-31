@@ -24,19 +24,18 @@
 - OpenAI API キー
 - NewsAPI キー
 
-## 主な動作
+## システム設計図
 
-1. 人が近づくと挨拶
-2. 距離に応じて会話頻度を変更
-3. ニュースや一般的な話題について会話
-4. 喜怒哀楽の感情表現
-5. 音声に合わせた口パク表現
+- [状態遷移図](docs/state-diagram.md)
+- [感情遷移フロー](docs/emotion-flow.md)
+- [システムアーキテクチャ](docs/system-architecture.md)
 
 ## ファイル構成
 
 - `zundamon_system.py` - メインのシステムコード
 - `requirements.txt` - 必要なPythonライブラリ
 - `setup_guide.md` - セットアップガイド
+- `docs/` - 各種設計図とドキュメント
 
 ## ライセンス
 
